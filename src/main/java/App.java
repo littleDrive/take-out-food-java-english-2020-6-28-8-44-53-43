@@ -24,8 +24,8 @@ public class App {
         for (String s : inputs) {
             String[] info = s.split("x");
             ArrayList<String> list = new ArrayList<>();
-            list.add(info[0]);
-            list.add(info[1]);
+            list.add(info[0].trim());
+            list.add(info[1].trim());
             orderInfo.add(list);
         }
 //       [[name, price, number], [name, price, number]]
@@ -39,6 +39,7 @@ public class App {
                     list1.add(item.getName());
                     list1.add(String.valueOf(item.getPrice()));
                     list1.add(String.valueOf(num));
+                    orderInfo2.add(list1);
                     break;
                 }
             }
@@ -47,52 +48,56 @@ public class App {
         int total1 = 0;
 //        半价优惠
         int total2 = 0;
+        int saving = 0;
         boolean flag = true;
         String b_c = "Braised chicken";
-        String c_c = "coca-cola";
+        String c_n = "Cold noodles";
+
         for (ArrayList<String> item : orderInfo2) {
-            if (item.get(0).equals(b_c) || item.get(0).equals(c_c)) {
-                total2 = Integer.valueOf(item.get(1)) * Integer.valueOf(item.get(2)) / 2;
+
+            if (item.get(0).equals(b_c) || item.get(0).equals(c_n)) {
+                saving += (int)(Double.valueOf(item.get(1)) * Double.valueOf(item.get(2)) / 2);
+                total2 += (int)(Double.valueOf(item.get(1)) * Double.valueOf(item.get(2)) / 2);
                 flag = false;
             } else {
-                total1 += Integer.valueOf(item.get(1)) * Integer.valueOf(item.get(2));
+                total2 += (int)(Double.valueOf(item.get(1)) * Double.valueOf(item.get(2)));
             }
-            total1 += Integer.valueOf(item.get(1)) * Integer.valueOf(item.get(2));
+            total1 += (int) (Double.valueOf(item.get(1)) * Double.valueOf(item.get(2)));
 
         }
         if (total1 >= 30) {
             total1 -= 6;
             flag = false;
         }
+        String result = "============= Order details =============\n";
+        for (ArrayList<String> item : orderInfo2) {
+            result += item.get(0) + " x " + item.get(2) + " = " + (int)(Double.valueOf(item.get(1)) * Double.valueOf(item.get(2))) + " yuan\n";
+        }
+        result += "-----------------------------------\n";
+
         if (false) {
-            return "============= Order details =============\n" +
-                    "Chinese hamburger x 4 = 24 yuan\n" +
-                    "-----------------------------------\n" +
-                    "Total：24 yuan\n" +
+
+
+                    result += "Total：" + total1 + " yuan\n" +
                     "===================================";
+
         } else if (total1 > total2){
-            return "============= Order details =============\n" +
-                    "Chinese hamburger x 4 = 24 yuan\n" +
-                    "Cold noodles x 1 = 8 yuan\n" +
+            result += "Promotion used:\n" +
+                    "Half price for certain dishes (Braised chicken，Cold noodles)，saving " + saving+" yuan\n" +
                     "-----------------------------------\n" +
-                    "Promotion used:\n" +
+                    "Total：" + total2 + " yuan\n" +
+                    "===================================";
+
+        }else {
+            result +=   "Promotion used:\n" +
                     "满30减6 yuan，saving 6 yuan\n" +
                     "-----------------------------------\n" +
-                    "Total：26 yuan\n" +
+                    "Total：" + total1 + " yuan\n" +
                     "===================================";
-        }else {
-            return "============= Order details =============\n" +
-                    "Braised chicken x 1 = 18 yuan\n" +
-                    "Chinese hamburger x 2 = 12 yuan\n" +
-                    "Cold noodles x 1 = 8 yuan\n" +
-                    "-----------------------------------\n" +
-                    "Promotion used:\n" +
-                    "Half price for certain dishes (Braised chicken，Cold noodles)，saving 13 yuan\n" +
-                    "-----------------------------------\n" +
-                    "Total：25 yuan\n" +
-                    "===================================";
+
+
 
         }
-
+        return  result;
     }
 }
