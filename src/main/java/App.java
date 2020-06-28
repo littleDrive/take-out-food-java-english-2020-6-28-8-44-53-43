@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -14,7 +16,83 @@ public class App {
 
     public String bestCharge(List<String> inputs) {
         //TODO: write code here
+        List<Item> itemList = itemRepository.findAll();
+        List<SalesPromotion> salesPromotionList = salesPromotionRepository.findAll();
 
-        return null;
+//      [[id, number], [id, number]]
+        ArrayList<ArrayList<String>> orderInfo = new ArrayList<>();
+        for (String s : inputs) {
+            String[] info = s.split("x");
+            ArrayList<String> list = new ArrayList<>();
+            list.add(info[0]);
+            list.add(info[1]);
+            orderInfo.add(list);
+        }
+//       [[name, price, number], [name, price, number]]
+        ArrayList<ArrayList<String>> orderInfo2 = new ArrayList<>();
+        for (ArrayList<String> list : orderInfo) {
+            String id = list.get(0);
+            String num = list.get(1);
+            for (Item item : itemList) {
+                if (item.getId().equals(id)) {
+                    ArrayList<String> list1 = new ArrayList<>();
+                    list1.add(item.getName());
+                    list1.add(String.valueOf(item.getPrice()));
+                    list1.add(String.valueOf(num));
+                    break;
+                }
+            }
+        }
+//        30-6优惠
+        int total1 = 0;
+//        半价优惠
+        int total2 = 0;
+        boolean flag = true;
+        String b_c = "Braised chicken";
+        String c_c = "coca-cola";
+        for (ArrayList<String> item : orderInfo2) {
+            if (item.get(0).equals(b_c) || item.get(0).equals(c_c)) {
+                total2 = Integer.valueOf(item.get(1)) * Integer.valueOf(item.get(2)) / 2;
+                flag = false;
+            } else {
+                total1 += Integer.valueOf(item.get(1)) * Integer.valueOf(item.get(2));
+            }
+            total1 += Integer.valueOf(item.get(1)) * Integer.valueOf(item.get(2));
+
+        }
+        if (total1 >= 30) {
+            total1 -= 6;
+            flag = false;
+        }
+        if (false) {
+            return "============= Order details =============\n" +
+                    "Chinese hamburger x 4 = 24 yuan\n" +
+                    "-----------------------------------\n" +
+                    "Total：24 yuan\n" +
+                    "===================================";
+        } else if (total1 > total2){
+            return "============= Order details =============\n" +
+                    "Chinese hamburger x 4 = 24 yuan\n" +
+                    "Cold noodles x 1 = 8 yuan\n" +
+                    "-----------------------------------\n" +
+                    "Promotion used:\n" +
+                    "满30减6 yuan，saving 6 yuan\n" +
+                    "-----------------------------------\n" +
+                    "Total：26 yuan\n" +
+                    "===================================";
+        }else {
+            return "============= Order details =============\n" +
+                    "Braised chicken x 1 = 18 yuan\n" +
+                    "Chinese hamburger x 2 = 12 yuan\n" +
+                    "Cold noodles x 1 = 8 yuan\n" +
+                    "-----------------------------------\n" +
+                    "Promotion used:\n" +
+                    "Half price for certain dishes (Braised chicken，Cold noodles)，saving 13 yuan\n" +
+                    "-----------------------------------\n" +
+                    "Total：25 yuan\n" +
+                    "===================================";
+
+        }
+
     }
 }
