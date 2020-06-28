@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -75,7 +74,7 @@ public class App {
         }
         result += "-----------------------------------\n";
 
-        if (false) {
+        if (flag) {
 
 
                     result += "Total：" + total1 + " yuan\n" +
